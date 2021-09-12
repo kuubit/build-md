@@ -11,7 +11,8 @@
     "build": "pkg buildmd.js --out-path ./dist"
   },
   "dependencies": {
-    "front-matter": "^4.0.2"
+    "front-matter": "^4.0.2",
+    "string-replace-async": "^3.0.2"
   },
   "engines": {
     "node": ">=16.9.1"

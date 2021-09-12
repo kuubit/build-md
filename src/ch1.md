@@ -1,1 +1,1 @@
-Hello world from chapter 1 of the test document!
+Hello world from chapter 1 of the test document! [[fragments/fragment1.md]]
