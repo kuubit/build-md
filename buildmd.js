@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import fm from 'front-matter';
-import replaceAsync from "string-replace-async";
+const fs = require('fs');
+const path = require('path');
+const fm = require('front-matter');
+const replaceAsync = require('./util/replaceAsync');
 
 const args = process.argv.slice(2);
 
