@@ -40,19 +40,8 @@ async function build({ entrypoint, outputPath }) {
     }
 }
 
-if (args.length > 1) {
-    build({
-        entrypoint: args[0],
-        outputPath: args[1],
+build({
+    entrypoint: args[0] ?? DEFAULT_ENTRYPOINT_PATH,
+    outputPath: args[1] ?? DEFAULT_OUTPUT_PATH,
     });
-} else if (args.length > 0) {
-    build({
-        entrypoint: args[0],
-        outputPath: DEFAULT_OUTPUT_PATH,
-    });
-} else {
-    build({
-        entrypoint: DEFAULT_ENTRYPOINT_PATH,
-        outputPath: DEFAULT_OUTPUT_PATH,
-    });
-}
+});
