@@ -1,6 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const fm = require('front-matter');
+import fs from 'fs';
+import path from 'path';
+import fm from 'front-matter';
+import replaceAsync from "string-replace-async";
 
 const args = process.argv.slice(2);
 
@@ -9,11 +10,11 @@ const DEFAULT_OUTPUT_PATH = './output';
 const DEFAULT_OUTPUT_FILENAME = 'output.md';
 const BRAKET_REGEX = /\[\[(.*?)\]\]/g;
 
-function replacer(match, baseDir) {
-    const filePath = match.slice(2, match.length - 2);
-    const fullFilePath = path.join(baseDir, filePath);
+let COUNT = 0;
 
-    return fs.readFileSync(fullFilePath, 'utf-8');
+function extractFilePath(match, baseDir) {
+    const filePath = match.slice(2, match.length - 2);
+    return path.join(baseDir, filePath);
 }
 
 function saveResult(outputPath, data) {
@@ -25,6 +26,15 @@ function saveResult(outputPath, data) {
         fs.mkdirSync(dirname, { recursive: true });
         fs.writeFileSync(outputPath, data, 'utf-8');
     }
+    console.log(`Result saved to ${path.join(process.cwd(), outputPath)}`);
+}
+
+async function hydrateBranch(prevMatch, baseDir) {
+    COUNT++;
+    const filePath = extractFilePath(prevMatch, baseDir);
+    const data = await fs.promises.readFile(filePath, 'utf-8');
+    const updated = await replaceAsync(data, BRAKET_REGEX, async (match) => await hydrateBranch(match, baseDir));
+    return updated;
 }
 
 async function build({ entrypoint, outputPath }) {
@@ -32,27 +42,16 @@ async function build({ entrypoint, outputPath }) {
     try {
         const data = await fs.promises.readFile(entrypoint, 'utf-8');
         const title = fm(data)?.attributes?.title;
-        const updated = data.replace(BRAKET_REGEX,  match => replacer(match, baseDir));
+        const updated = await replaceAsync(data, BRAKET_REGEX, async (match) => await hydrateBranch(match, baseDir));
 
         saveResult(path.join(outputPath, title ? `${title}.md` : DEFAULT_OUTPUT_FILENAME), updated);
+        console.log(`Completed with ${COUNT} replacements!`);
     } catch(err) {
         console.log(err);
     }
 }
 
-if (args.length > 1) {
-    build({
-        entrypoint: args[0],
-        outputPath: args[1],
-    });
-} else if (args.length > 0) {
-    build({
-        entrypoint: args[0],
-        outputPath: DEFAULT_OUTPUT_PATH,
-    });
-} else {
-    build({
-        entrypoint: DEFAULT_ENTRYPOINT_PATH,
-        outputPath: DEFAULT_OUTPUT_PATH,
-    });
-}
+build({
+    entrypoint: args[0] ?? DEFAULT_ENTRYPOINT_PATH,
+    outputPath: args[1] ?? DEFAULT_OUTPUT_PATH,
+});

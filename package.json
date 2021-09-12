@@ -2,6 +2,7 @@
   "name": "build-md",
   "version": "1.0.0",
   "description": "A small utility to bundle together multiple markdown files.",
+  "type": "module",
   "main": "buildmd.js",
   "author": "David Rojas <drojas@kuubit.com>",
   "license": "MIT",
@@ -10,7 +11,8 @@
     "build": "pkg buildmd.js --out-path ./dist"
   },
   "dependencies": {
-    "front-matter": "^4.0.2"
+    "front-matter": "^4.0.2",
+    "string-replace-async": "^3.0.2"
   },
   "engines": {
     "node": ">=16.9.1"
