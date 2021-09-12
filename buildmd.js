@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const fm = require('front-matter');
+import fs from 'fs';
+import path from 'path';
+import fm from 'front-matter';
 
 const args = process.argv.slice(2);
 
