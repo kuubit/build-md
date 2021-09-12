@@ -3,7 +3,7 @@
 #include "setup_environment.iss"
 
 #define MyAppName "BuildMD"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "Kuubit LLC"
 #define MyAppExeName "buildmd-win.exe"
 #define MyAppExeOutputName "buildmd.exe"

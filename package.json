@@ -1,6 +1,6 @@
 {
   "name": "build-md",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A small utility to bundle together multiple markdown files.",
   "main": "buildmd.js",
   "author": "David Rojas <drojas@kuubit.com>",
